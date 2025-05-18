@@ -31,11 +31,12 @@ async function setupSheets() {
     
     // Define required sheets and their headers
     const requiredSheets = {
-      'Customers': ['ID', 'Name', 'Email', 'Phone', 'Address', 'CreatedAt'],
+      'Customers': ['ID', 'Name', 'Email', 'Phone', 'Address', 'FacebookID', 'Notes', 'CreatedAt'],
       'Products': ['ID', 'Name', 'Description', 'Price', 'StockQuantity', 'CreatedAt'],
-      'Orders': ['ID', 'CustomerID', 'OrderDate', 'Status', 'TotalAmount', 'PaymentStatus', 'AmountCollected'],
-      'OrderItems': ['ID', 'OrderID', 'ProductID', 'Quantity', 'Price'],
-      'Reminders': ['ID', 'CustomerID', 'Title', 'Description', 'DueDate', 'Status', 'CreatedAt']
+      'Orders': ['ID', 'CustomerID', 'OrderDate', 'Status', 'DeliveryFee', 'TotalAmount', 'AmountCollected', 'DeliveryDate', 'PaymentStatus', 'Notes', 'CreatedAt'],
+      'OrderItems': ['ID', 'OrderID', 'ProductID', 'Quantity', 'Price', 'CreatedAt'],
+      'Reminders': ['ID', 'OrderID', 'ReminderType', 'DueDate', 'Amount', 'Status', 'Notes', 'CreatedAt'],
+      'Users': ['ID', 'Username', 'Password', 'Role', 'FullName', 'Email', 'LastLogin', 'CreatedAt']
     };
     
     // Create missing sheets and set headers

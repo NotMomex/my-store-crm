@@ -1,0 +1,5 @@
+# Sensitive files
+src/config/credentials/google-credentials.json
+node_modules/
+.env
+package-lock.json

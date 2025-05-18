@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Store CRM - API Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    .api-section {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    pre {
+      background-color: #f1f1f1;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Store CRM - API Test</h1>
+    <p>Use this page to test your API endpoints.</p>
+    
+    <div class="api-section">
+      <h2>API Test</h2>
+      <button onclick="testApi()">Test API Connection</button>
+      <div id="api-test-result"></div>
+    </div>
+    
+    <div class="api-section">
+      <h2>Customers API</h2>
+      <button onclick="fetchCustomers()">Get All Customers</button>
+      <button onclick="showAddCustomerForm()">Add New Customer</button>
+      <div id="add-customer-form" style="display: none; margin-top: 15px;">
+        <div class="form-group">
+          <label for="customer-name">Name:</label>
+          <input type="text" id="customer-name">
+        </div>
+        <div class="form-group">
+          <label for="customer-email">Email:</label>
+          <input type="email" id="customer-email">
+        </div>
+        <div class="form-group">
+          <label for="customer-phone">Phone:</label>
+          <input type="text" id="customer-phone">
+        </div>
+        <div class="form-group">
+          <label for="customer-address">Address:</label>
+          <textarea id="customer-address"></textarea>
+        </div>
+        <button onclick="addCustomer()">Submit</button>
+      </div>
+      <div id="customers-result"></div>
+    </div>
+    
+    <div class="api-section">
+      <h2>Products API</h2>
+      <button onclick="fetchProducts()">Get All Products</button>
+      <div id="products-result"></div>
+    </div>
+    
+    <div class="api-section">
+      <h2>Orders API</h2>
+      <button onclick="fetchOrders()">Get All Orders</button>
+      <div id="orders-result"></div>
+    </div>
+    
+    <div class="api-section">
+      <h2>Reminders API</h2>
+      <button onclick="fetchReminders()">Get All Reminders</button>
+      <div id="reminders-result"></div>
+    </div>
+  </div>
+
+  <script>
+    // Test API connection
+    function testApi() {
+      fetch('/api/test')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('api-test-result').innerHTML = 
+            `<h3>Result:</h3><pre>${JSON.stringify(data, null, 2)}</pre>`;
+        })
+        .catch(error => {
+          document.getElementById('api-test-result').innerHTML = 
+            `<h3>Error:</h3><pre>${error.message}</pre>`;
+        });
+    }
+    
+    // Customer API functions
+    function fetchCustomers() {
+      fetch('/api/customers')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('customers-result').innerHTML = 
+            `<h3>Results:</h3><pre>${JSON.stringify(data, null, 2)}</pre>`;
+        })
+        .catch(error => {
+          document.getElementById('customers-result').innerHTML = 
+            `<h3>Error:</h3><pre>${error.message}</pre>`;
+        });
+    }
+    
+    function showAddCustomerForm() {
+      document.getElementById('add-customer-form').style.display = 'block';
+    }
+    
+    function addCustomer() {
+      const customerData = {
+        name: document.getElementById('customer-name').value,
+        email: document.getElementById('customer-email').value,
+        phone: document.getElementById('customer-phone').value,
+        address: document.getElementById('customer-address').value
+      };
+      
+      fetch('/api/customers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(customerData)
+      })
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('customers-result').innerHTML = 
+            `<h3>Customer Added:</h3><pre>${JSON.stringify(data, null, 2)}</pre>`;
+          document.getElementById('add-customer-form').style.display = 'none';
+          // Clear form
+          document.getElementById('customer-name').value = '';
+          document.getElementById('customer-email').value = '';
+          document.getElementById('customer-phone').value = '';
+          document.getElementById('customer-address').value = '';
+        })
+        .catch(error => {
+          document.getElementById('customers-result').innerHTML = 
+            `<h3>Error:</h3><pre>${error.message}</pre>`;
+        });
+    }
+    
+    // Product API functions
+    function fetchProducts() {
+      fetch('/api/products')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('products-result').innerHTML = 
+            `<h3>Results:</h3><pre>${JSON.stringify(data, null, 2)}</pre>`;
+        })
+        .catch(error => {
+          document.getElementById('products-result').innerHTML = 
+            `<h3>Error:</h3><pre>${error.message}</pre>`;
+        });
+    }
+    
+    // Order API functions
+    function fetchOrders() {
+      fetch('/api/orders')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('orders-result').innerHTML = 
+            `<h3>Results:</h3><pre>${JSON.stringify(data, null, 2)}</pre>`;
+        })
+        .catch(error => {
+          document.getElementById('orders-result').innerHTML = 
+            `<h3>Error:</h3><pre>${error.message}</pre>`;
+        });
+    }
+    
+    // Reminder API functions
+    function fetchReminders() {
+      fetch('/api/reminders')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('reminders-result').innerHTML = 
+            `<h3>Results:</h3><pre>${JSON.stringify(data, null, 2)}</pre>`;
+        })
+        .catch(error => {
+          document.getElementById('reminders-result').innerHTML = 
+            `<h3>Error:</h3><pre>${error.message}</pre>`;
+        });
+    }
+    
+    // Run test on page load
+    window.onload = function() {
+      testApi();
+    };
+  </script>
+</body>
+</html>
